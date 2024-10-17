@@ -1,0 +1,102 @@
+{
+  "name": "bolidozor_kiosk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bolidozor visualization tool for kiosk",
+  "author": "Roman Dvorak <romandvorak@mlab.cz>",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "pack": "electron-builder --dir",
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "main.js",
+  "build": {
+    "appId": "cz.Bolidozor.Kiosk",
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility"
+    }
+  },
+  "dependencies": {
+    "@deck.gl/core": "^8.9.36",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@hirelofty/vue_deckgl": "^1.2.1",
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "axios": "^1.7.7",
+    "core-js": "^3.8.3",
+    "fft-js": "^0.0.12",
+    "fft.js": "^4.0.4",
+    "mathjs": "^13.2.0",
+    "vue": "^3.2.13",
+    "vue-deck.gl": "github:localeai/vue-deck.gl",
+    "vue-loader": "^17.4.2",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "^5.0.8",
+    "bulma": "^1.0.2",
+    "electron": "32.1.2",
+    "electron-builder": "^25.1.8",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "html-webpack-plugin": "^5.6.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "_id": "bolidozor_kiosk@1.0.0",
+  "build": {
+    "appId": "cz.bolidozor.kiosk",
+    "productName": "Bolidozor Kiosk",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "css/*",
+      "js/*",
+      "node_modules/*"
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "win": {
+      "target": "portable"
+    }
+  },
+  "keywords": [],
+  "license": "ISC",
+  "readme": "ERROR: No README data found!"
+}

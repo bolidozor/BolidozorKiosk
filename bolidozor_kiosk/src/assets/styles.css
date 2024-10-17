@@ -1,0 +1,77 @@
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .container {
+    flex-grow: 1; /* Aby kontejner zabíral zbytek prostoru */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  
+body {
+    font-family: 'Orbitron', sans-serif;  /* Futuristický font */
+    background-color: #000000;  /* Tmavé pozadí */
+    color: #00aaff;  /* Neonově modrá barva textu */
+  }
+  
+  h1, h2, h3, h4 {
+    color: #00aaff;  /* Modré nadpisy */
+  }
+  
+  button {
+    background-color: #001f3f;  /* Tmavě modrá tlačítka */
+    border: 2px solid #00aaff;  /* Neonové okraje tlačítek */
+    color: #00aaff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #00aaff;
+    color: #0a0f24;
+  }
+  
+  .menu-list .button {
+    margin-bottom: 10px;
+    background-color: #001f3f;
+    border: 2px solid #00aaff;
+    color: #00aaff;
+  }
+  
+  .menu-list .button:hover {
+    background-color: #00aaff;
+    color: #001f3f;
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  .card {
+    background-color: #001f3f;
+    border: 1px solid #00aaff;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .card h1 {
+    font-size: 2em;
+    color: #00aaff;
+    text-align: center;
+  }
+  
+
+  h1 {
+    text-shadow: 0px 0px 8px #00aaff;
+  }
+  
+  button {
+    box-shadow: 0px 0px 10px #00aaff;
+  }
