@@ -14,12 +14,27 @@
   },
   "main": "main.js",
   "build": {
-    "appId": "cz.Bolidozor.Kiosk",
+    "appId": "cz.bolidozor.kiosk",
+    "productName": "Bolidozor Kiosk",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "css/*",
+      "js/*",
+      "node_modules/*"
+    ],
     "linux": {
       "target": [
-        "AppImage"
+        "AppImage",
+        "deb"
       ],
       "category": "Utility"
+    },
+    "win": {
+      "target": "portable"
     }
   },
   "dependencies": {
@@ -35,6 +50,7 @@
     "mathjs": "^13.2.0",
     "vue": "^3.2.13",
     "vue-deck.gl": "github:localeai/vue-deck.gl",
+    "vue-i18n": "^10.0.4",
     "vue-loader": "^17.4.2",
     "vue-router": "^4.4.5"
   },
@@ -72,30 +88,6 @@
     "not ie 11"
   ],
   "_id": "bolidozor_kiosk@1.0.0",
-  "build": {
-    "appId": "cz.bolidozor.kiosk",
-    "productName": "Bolidozor Kiosk",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "main.js",
-      "index.html",
-      "css/*",
-      "js/*",
-      "node_modules/*"
-    ],
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "category": "Utility"
-    },
-    "win": {
-      "target": "portable"
-    }
-  },
   "keywords": [],
   "license": "ISC",
   "readme": "ERROR: No README data found!"

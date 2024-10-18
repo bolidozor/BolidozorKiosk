@@ -1,0 +1,17 @@
+{
+    "message": {
+      "hello": "Ahoj",
+      "latest_events": "Latest events"
+    },
+    "home": {
+        "label": "Home",
+        "title": "Welcome to Bolidozor kiosk.",
+        "subtext": "Let's explore the unique Bolidozor network together. Here you will find information about our stations, statistics and much more."
+    },
+    "map": "Map",
+    "statistics": "Statistics",
+    "about": "About",
+    "stream": "Stream",
+    "our data": "Our data",
+    "how it works": "How it works"
+  }

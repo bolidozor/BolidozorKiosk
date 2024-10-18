@@ -1,18 +1,20 @@
 <template>
   <div class="columns">
 
-    <div class="menu column is-2">
+    <div class="menu column is-2" style="height: 100vh;">
+      <div>
         <router-link to="/" class="button is-large is-fullwidth">
             <div class="icon" >
             <i class="fas fa-home"></i>
+            
             </div>
-          <div>Home</div>
+          <div>{{ $t('home.label') }}</div>
         </router-link>
         <router-link to="/real-time-map" class="button is-large is-fullwidth">
           <div class="icon">
             <i class="fas fa-map"></i>
           </div>
-          <span>Map</span>
+          <span>{{ $t('map') }}</span>
         </router-link>
         <router-link to="/statistics" class="button is-large is-fullwidth">
           <div class="icon">
@@ -24,20 +26,25 @@
           <div class="icon">
             <i class="fas fa-video"></i>
           </div>
-          <span>Stream</span>
+          <span>{{  $t('stream') }}</span>
         </router-link>
         <router-link to="/data" class="button is-large is-fullwidth">
           <div class="icon">
             <i class="fas fa-database"></i>
           </div>
-          <span>Our Data</span>
+          <span>{{ $t('our data')}}</span>
         </router-link>
         <router-link to="/about" class="button is-large is-fullwidth">
           <div class="icon">
             <i class="fas fa-cogs"></i>
           </div>
-          <span>How it works</span>
+          <span>{{ $t('how it works') }}</span>
         </router-link>
+        </div>
+        <div style="margin: 10pt; width: 120pt;">
+            <img class="languageFlag" :src="require('@/assets/flag_cz.png')" @click="changeLanguage('cs')" style="height: 50px;">
+            <img class="languageFlag" :src="require('@/assets/flag_uk.png')" @click="changeLanguage('en')" style="height: 50px;">
+        </div>
       </div>
       
       <div class="column is-6" style="z-index: 25; height: min-content;">
@@ -46,7 +53,7 @@
 
 
     <div class="column is-3 card list-card" style="position: absolute; right: 0; top: 0; margin: 10px;">
-      <h2 style="margin: 10px 10px 10px 0pt;">Latest events </h2>
+      <h2 style="margin: 10px 10px 10px 0pt;">{{ $t('message.latest_events') }}</h2>
       <div>
       <div v-for="event in events.slice().reverse()" :key="event" class="list-events-rows">
         {{ event.message.station }}<br>
@@ -83,10 +90,7 @@
           >
             <l-icon>
               <div :ref="`observatoryIcon-${observatory.identifier}`" class="circle-icon icon-inactive">
-                <div class="cir1"></div>
-                <div class="cir2"></div>
-                <div class="cir3"></div>
-                <div class="cir4"></div>
+
               </div>
             </l-icon>
             <l-popup> <div class="leaflet-popup-content">
@@ -148,6 +152,11 @@ export default {
     computed: {
     },
     methods: {
+
+      changeLanguage(lang) {
+        this.$i18n.locale = lang;
+      },
+
       fetchObservatories() {
         axios.get('https://rtbolidozor.astro.cz/api/v1/observatories/')
         .then(response => {
@@ -203,7 +212,9 @@ export default {
 
         const refName = `observatoryIcon-${event_obs}`;
         console.log("REF", refName);
-        if (this.$refs[refName]) {
+   
+        // Ensure the reference exists before accessing its properties
+        if (this.$refs[refName] && this.$refs[refName][0]) {
           console.log(this.$refs[refName]);
           this.$refs[refName][0].classList.remove('icon-inactive', 'icon-active');
           this.$refs[refName][0].classList.add('icon-event');
@@ -212,7 +223,8 @@ export default {
             this.$refs[refName][0].classList.remove('icon-event');
             this.$refs[refName][0].classList.add('icon-active');
           }, 3000);
-        
+        } else {
+          console.error(`Reference ${refName} not found.`);
         }
       
     },
@@ -245,7 +257,13 @@ export default {
   backdrop-filter: blur(5px);
   background-color: #001f3fba;
   z-index: 50;
+}
 
+.languageFlag {
+  margin: 10pt;
+  height: 75pt;
+  position: relative;
+  z-index: 50;
 }
 
 .menu .icon {

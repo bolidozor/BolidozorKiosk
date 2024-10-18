@@ -2,8 +2,12 @@
 
 
 <div class="card mt-5">
-<h2 class="title is-2">Welcome to Bolidozor kiosk</h2>
-<p>Here you can see the latest data from the Bolidozor network.</p>
+<h2 class="title is-2">{{ $t('home.title') }}</h2>
+
+<img :src="require('@/assets/bz_logo_white.svg')">
+<br>
+
+<p>{{ $t('home.subtext') }}</p>
   </div> 
         
 
@@ -41,7 +45,7 @@ export default {
 .card {
   /* background-color: #1a1a1a; */
   border: 1px solid #00ff00;
-  padding: 20px;
+  padding: 50px 20px;
   border-radius: 10px;
 }
 

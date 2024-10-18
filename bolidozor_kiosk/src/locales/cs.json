@@ -1,0 +1,17 @@
+{
+    "message": {
+        "hello": "Ahoj",
+        "latest_events": "Poslední události"
+    },
+    "home": {
+        "label": "Domů",
+        "title": "Vítejte u Bolidozor kiosku.",
+        "subtext": "Pojďte s námi prozkoumat unikátní síť Bolidozor. Zde najdete informace o našich stanicích, statistikách a mnoho dalšího."
+    },
+    "map": "Mapa",
+    "statistics": "Statistiky",
+    "about": "O nás",
+    "stream": "Stream",
+    "our data": "Naše data",
+    "how it works": "Jak to funguje?"
+}
