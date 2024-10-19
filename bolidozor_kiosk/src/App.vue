@@ -47,13 +47,14 @@
         </div>
       </div>
       
-      <div class="column is-6" style="z-index: 25; height: min-content;">
+      <div class="column is-6" style="z-index: 25; height: min-content; width: 55%;">
         <router-view  :events="events" :observatories="observatories"></router-view>
       </div>
 
 
     <div class="column is-3 card list-card" style="position: absolute; right: 0; top: 0; margin: 10px;">
       <h2 style="margin: 10px 10px 10px 0pt;">{{ $t('message.latest_events') }}</h2>
+      <span v-if="last_event_duration">Last event before {{ last_event_duration }} s.</span>
       <div>
       <div v-for="event in events.slice().reverse()" :key="event" class="list-events-rows">
         {{ event.message.station }}<br>
@@ -70,7 +71,7 @@
       v-model="zoom"
       v-model:zoom="zoom"
       :zoomControl="false"
-      :center="[49.41322, 15.219482]"
+      :center=center
       paddingBottomRight="[0, 0]"
       paddingTopLeft="[0, 0]"
       maxZoom=12
@@ -96,7 +97,12 @@
             <l-popup> <div class="leaflet-popup-content">
                 <h3 class="text-strong">{{ observatory.name }} ({{observatory.identifier}})</h3>
                 <p><strong>Location: </strong> {{ observatory.location }}</p>
-                <p><strong>Stations: </strong></p>
+                <template v-for="station in observatory.stations.filter(station => station.status === 'active')" v-bind:key="station.identifier">
+                <img 
+                    :src="`https://space.astro.cz/bolidozor/support/rmob/${station.identifier}_` + new Date().toLocaleDateString('en-GB').slice(3).replace(/\//g, '') + `.svg`" 
+                    alt="RMOB preview"
+                  />
+                  </template>
                     <!-- <ul v-for = "station in observatory.stations">
                         <li>{{ station.identifier }} - {{ station.name }} - {{ station.status }}</li>
                     </ul> -->
@@ -130,11 +136,14 @@ export default {
   name: 'App',
   data() {
     return {
+      last_event_duration: 0,
+      last_event: null,
+      intervalId: null,
       events : [],
       observatories : [],
       socket: null,
       zoom: 7,
-      center: [49.8, 15.5],
+      center: [50.8, 15.5],
     };
   },
   components: {
@@ -147,11 +156,21 @@ export default {
   mounted() {
       this.setupWebSocket();
       this.fetchObservatories();
+      this.intervalId = setInterval(() => {
+        if(this.last_event){
+          this.last_event_duration = Math.round((new Date() - this.last_event)/1000);
+        }
+      }, 500);
     },
 
     computed: {
     },
     methods: {
+
+      resetMap() {
+        const map = this.$refs.map.mapObject;
+        map.setView([10, 10], 8); // Nastavení mapy na uložený stav
+      },
 
       changeLanguage(lang) {
         this.$i18n.locale = lang;
@@ -197,6 +216,7 @@ export default {
       handleWebSocketMessage(data) {
 
         data.timestamp = new Date();
+        this.last_event = data.timestamp;
         console.log('HandleWebsocket:', data);
         this.events.push(data);
         if (this.events.length > 10) {
@@ -233,9 +253,24 @@ export default {
 </script>
 
 
+<style>
+html {
+  height: 100%;
+  overflow: hidden;
+
+  scrollbar-width: thin;
+}
+
+body {
+
+  scrollbar-width: thin;
+}
+</style>
 
 
 <style scoped>
+
+
 .app {
   background-color: #001f3f; /* Dark blue background */
   color: #00d1b2; /* Neon green text */
@@ -326,8 +361,6 @@ export default {
 .list-events-rows:nth-child(even) {
   background-color: #1835425f;
 }
-
-
 
 
 

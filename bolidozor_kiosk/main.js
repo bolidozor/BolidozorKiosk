@@ -20,6 +20,7 @@ function createWindow() {
         //height: 600,  // Základní výška při spuštění, v případě fullscreen ignorováno
         //fullscreen: true,  // Spustí aplikaci ve fullscreen režimu
         frame: false,  // Skryje okno aplikace a menu řádek
+        kiosk: true,
         webPreferences: {
           nodeIntegration: true,
           contextIsolation: true,

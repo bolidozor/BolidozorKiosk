@@ -4,6 +4,7 @@ import DataView from './views/DataView.vue';
 import AboutView from './views/AboutView.vue';
 import StreamView from './views/StreamView.vue';
 import StatisticsView from './views/StatisticsView.vue';
+import MapView from './views/MapView.vue';
 
 const routes = [
     {
@@ -30,6 +31,11 @@ const routes = [
       path: '/statistics',
       name: 'statistics',
       component: StatisticsView,
+    },
+    {
+      path: '/map',
+      name: 'map',
+      component: MapView,
     },
   ];
   

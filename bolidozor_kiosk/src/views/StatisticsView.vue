@@ -11,15 +11,14 @@
         <div class="content">
           <template v-if="observatory.stations.some(station => station.status === 'active')">
                 
-                              <div class="card-header">
-                              <p class="card-header-title">{{observatory.identifier}}, {{observatory.name}} <br> {{ observatory.location }}</p>
-                            </div>
+                              <p class="mt-3" style="color: rgb(105 45 115);">{{observatory.identifier}}, {{observatory.name}} <br> {{ observatory.location }}</p>
               <div 
-                class="station m-4"
+                class="station m-1"
                 v-for="station in observatory.stations.filter(station => station.status === 'active')"
                 v-bind:key="station.identificator"
               >
-                <div class="tag is-llight-primary is-medium"><b>{{station.identifier}}</b>
+                <div class="tag is-llight-primary is-medium mb-3">
+                  <b>{{station.identifier}}</b>
                   <span 
                     class="tag ml-2" 
                     :class="{
@@ -103,9 +102,17 @@ export default {
     max-height: 80vh;
     overflow-y: scroll;
 
-  border: 1px solid #00ff00;
-  padding: 50px 20px;
-  border-radius: 10px;
+    border: 1px solid #0550c2;
+    padding: 20px 10px;
+    border-radius: 10px;
+    background-color: #cde3f9ba;
+    backdrop-filter: blur(5px);
+    color: rgb(38, 38, 71);
+  }
+
+  .stat-container img {
+    width: 100%;
+  
   }
 
 </style>
