@@ -54,7 +54,7 @@
 
     <div class="column is-3 card list-card" style="position: absolute; right: 0; top: 0; margin: 10px;">
       <h2 style="margin: 10px 10px 10px 0pt;">{{ $t('message.latest_events') }}</h2>
-      <span v-if="last_event_duration">Last event before {{ last_event_duration }} s.</span>
+      <span v-if="(last_event_duration >= 0)">Last event before {{ last_event_duration }} s.</span>
       <div>
       <div v-for="event in events.slice().reverse()" :key="event" class="list-events-rows">
         {{ event.message.station }}<br>
@@ -136,7 +136,7 @@ export default {
   name: 'App',
   data() {
     return {
-      last_event_duration: 0,
+      last_event_duration: -1,
       last_event: null,
       intervalId: null,
       events : [],
@@ -207,6 +207,10 @@ export default {
 
         this.socket.onclose = () => {
           console.log('WebSocket connection closed');
+          setTimeout(() => {
+            console.log("Try to reconnect");
+            this.setupWebSocket();
+          }, 5000);
         };
 
         this.socket.onerror = (error) => {
@@ -361,11 +365,6 @@ body {
 .list-events-rows:nth-child(even) {
   background-color: #1835425f;
 }
-
-
-
-
-
 
 
 
