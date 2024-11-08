@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from './views/HomeView.vue';
 import DataView from './views/DataView.vue';
+import MapView from './views/MapView.vue';
 import AboutView from './views/AboutView.vue';
 import StreamView from './views/StreamView.vue';
 import StatisticsView from './views/StatisticsView.vue';
-import MapView from './views/MapView.vue';
 
 const routes = [
     {
@@ -16,6 +16,12 @@ const routes = [
       path: '/data',
       name: 'data',
       component: DataView,
+    },
+    {
+      path: "/real-time-map",
+      name: "mapa",
+      component: MapView,
+      props: true, 
     },
     {
       path: '/stream',

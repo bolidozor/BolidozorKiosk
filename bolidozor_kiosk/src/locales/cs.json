@@ -1,7 +1,9 @@
 {
     "message": {
         "hello": "Ahoj",
-        "latest_events": "Poslední události"
+        "latest_events": "Poslední události",
+        "latest_event_before": "Poslední detekce před "
+
     },
     "home": {
         "label": "Domů",

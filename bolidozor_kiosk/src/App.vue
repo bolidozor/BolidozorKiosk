@@ -48,13 +48,15 @@
       </div>
       
       <div class="column is-6" style="z-index: 25; height: min-content; width: 55%;">
-        <router-view  :events="events" :observatories="observatories"></router-view>
+        <router-view  :events="events" :observatories="observatories" v-model:center="center"></router-view>
       </div>
 
 
-    <div class="column is-3 card list-card" style="position: absolute; right: 0; top: 0; margin: 10px;">
+    <div :class="['column is-3 card list-card']" style="position: absolute; right: 0; top: 0; margin: 10px;">
+      <div :class="[{'blink-red': active_event}]">
       <h2 style="margin: 10px 10px 10px 0pt;">{{ $t('message.latest_events') }}</h2>
-      <span v-if="(last_event_duration >= 0)">Last event before {{ last_event_duration }} s.</span>
+      <span v-if="(last_event_duration >= 0)">{{ $t('message.latest_event_before') }} {{ last_event_duration }}s.</span>
+      </div>
       <div>
       <div v-for="event in events.slice().reverse()" :key="event" class="list-events-rows">
         {{ event.message.station }}<br>
@@ -68,14 +70,12 @@
 
       <div class="map-container">
     <l-map
-      v-model="zoom"
-      v-model:zoom="zoom"
-      :zoomControl="false"
-      :center=center
-      paddingBottomRight="[0, 0]"
-      paddingTopLeft="[0, 0]"
-      maxZoom=12
-      minZoom=6
+      ref="map"
+      v-model:zoom=zoom
+      :zoomControl=0
+      v-model:center=center
+      :maxZoom=12
+      :minZoom=6
     >
       <l-tile-layer
         url="https://api.maptiler.com/maps/ch-swisstopo-lbm-dark/{z}/{x}/{y}@2x.png?key=S2rvHICi0noDquP1bxJP"
@@ -90,9 +90,7 @@
           :observatory="observatory"
           >
             <l-icon>
-              <div :ref="`observatoryIcon-${observatory.identifier}`" class="circle-icon icon-inactive">
-
-              </div>
+              <div :ref="`observatoryIcon-${observatory.identifier}`" :class="['circle-icon', 'icon-inactive', { 'has-active-station': observatory.stations.some(station => station.status === 'active') }]" ></div>
             </l-icon>
             <l-popup> <div class="leaflet-popup-content">
                 <h3 class="text-strong">{{ observatory.name }} ({{observatory.identifier}})</h3>
@@ -103,10 +101,32 @@
                     alt="RMOB preview"
                   />
                   </template>
-                    <!-- <ul v-for = "station in observatory.stations">
+                    <ul v-for="station in observatory.stations" :key="station">
                         <li>{{ station.identifier }} - {{ station.name }} - {{ station.status }}</li>
-                    </ul> -->
+                    </ul>
             </div> </l-popup>
+        </l-marker>
+
+        
+        <l-marker :lat-lng="[50, 15]">
+            <l-icon>
+              <div class="circle-icon icon-datacenter"></div>
+            </l-icon>
+            <l-popup>
+              <div class="leaflet-popup-content">
+                Ondřějov - Data and processing center
+              </div>
+            </l-popup>
+        </l-marker>
+        <l-marker :lat-lng="[47.348, 5.5151]">
+            <l-icon>
+              <div class="circle-icon icon-transmitter"></div>
+            </l-icon>
+            <l-popup>
+              <div class="leaflet-popup-content">
+                Graves radar - transmitter
+              </div>
+            </l-popup>
         </l-marker>
 
     </l-map>
@@ -116,7 +136,6 @@
 <script>
 
 import axios from 'axios';
-
 import {
   LMap,
   LIcon,
@@ -144,6 +163,9 @@ export default {
       socket: null,
       zoom: 7,
       center: [50.8, 15.5],
+      last_center: [0,0],
+      last_touch: null,
+      active_event: null,
     };
   },
   components: {
@@ -153,24 +175,42 @@ export default {
     LMarker,
     LPopup,
   },
+
   mounted() {
       this.setupWebSocket();
       this.fetchObservatories();
       this.intervalId = setInterval(() => {
         if(this.last_event){
           this.last_event_duration = Math.round((new Date() - this.last_event)/1000);
+
+          //TODO: porovnani pole je potreba v javascriptu delat jinak.. .
+          if(this.center != this.last_center){
+            console.log("Uzivatelska aktivita");
+            this.last_center = this.center;
+            this.last_touch = new Date();
+          }
+
+          //console.log((new Date() - this.last_touch));
+          if ((new Date() - this.last_touch) > 10000){
+            this.center = [50.8, 15.5];
+            this.last_center = [50.8, 15.5];
+            this.zoom = 7;
+          }
+
         }
       }, 500);
+    
+
     },
 
+    
     computed: {
     },
     methods: {
 
-      resetMap() {
-        const map = this.$refs.map.mapObject;
-        map.setView([10, 10], 8); // Nastavení mapy na uložený stav
-      },
+      //resetMap() {
+      //  this.center = [40, 13];
+      //},
 
       changeLanguage(lang) {
         this.$i18n.locale = lang;
@@ -223,13 +263,15 @@ export default {
         this.last_event = data.timestamp;
         console.log('HandleWebsocket:', data);
         this.events.push(data);
-        if (this.events.length > 10) {
+        if (this.events.length > 12) {
           this.events.shift();
         }
 
         var event_obs = data.message.observatory;
         console.log('HandleWebsocket:', event_obs);
         console.log(this.observatories);
+
+        this.active_event = event_obs;
         
         const obs_object = this.observatories.find(obs => obs.identifier === event_obs);
         console.log("Maarker", obs_object);
@@ -244,6 +286,7 @@ export default {
           this.$refs[refName][0].classList.add('icon-event');
 
           setTimeout(() => {
+            this.active_event = null;
             this.$refs[refName][0].classList.remove('icon-event');
             this.$refs[refName][0].classList.add('icon-active');
           }, 3000);
@@ -258,6 +301,34 @@ export default {
 
 
 <style>
+
+
+.leaflet-marker-icon {
+  margin: 0pt !important;
+  width: 0pt !important;
+  height: 0pt !important;
+}
+
+.blink-red {
+  animation: blinkAnimation 1s infinite;
+}
+
+@keyframes blinkAnimation {
+  0% {
+    opacity: 1;
+    background-color: red;
+  }
+  50% {
+    opacity: 0.5;
+    background-color: transparent;
+  }
+  100% {
+    opacity: 1;
+    background-color: red;
+  }
+}
+
+
 html {
   height: 100%;
   overflow: hidden;
@@ -281,6 +352,7 @@ body {
   font-family: 'Orbitron', sans-serif; /* Sci-fi font */
   width: 100%;
   height: 100%;
+  scrollbar-width: none;
 }
 
 
@@ -368,7 +440,10 @@ body {
 
 
 
-
+.ico {
+  background: blue;
+  color: red;
+}
 
 
 .map-container {
@@ -387,6 +462,8 @@ body {
   25%, 75% {
     opacity: 0;
     size: 2.5em;
+    width: 10em;
+    height: 10em;
   }
 }
 
@@ -418,26 +495,75 @@ body {
     transform: translate(-50%, -50%);
   }
 
+
+
   .icon-inactive {
-    width: 1.5em;
-    height: 1.5em;
+    width: 0.5em;
+    height: 0.5em;
     border-color: rgb(168, 168, 168);
     background-color: lightgrey;
   }
 
+  .has-active-station {
+    width: 1.5em;
+    height: 1.5em;
+
+  }
+
+
   .icon-active {
     width: 1.6em;
     height: 1.6em;
-    border-color: rgb(168, 168, 168);
-    background-color: rgb(73, 192, 231); /* light blue bit darker */
+    border: none;
+    #border-color: rgb(168, 168, 168);
+    #background-color: rgb(73, 192, 231); /* light blue bit darker */
+
+    background: rgb(0,255,0);
+    background: radial-gradient(circle, rgba(0,200,0,1) 0%, rgba(0,255,0,0.5) 40%, rgba(0, 255, 0, 0) 80%, rgba(0,255,0,0) 100%); 
   }
 
   .icon-event {
     width: 1.75em;
     height: 1.75em;
-    background-color: lightgreen;
-    border-color: grey;
+    border: none;
+    background: rgb(0,255,0);
+    background: radial-gradient(circle, rgba(0,200,0,1) 0%, rgba(0,255,0,0.5) 40%, rgba(0, 255, 0, 0) 80%, rgba(0,255,0,0) 100%); 
     animation: blink 1s infinite;
+  }
+
+
+@keyframes blink_transmitter {
+  0%, 50%, 100% {
+    opacity: 0.5;
+    size: 2em;
+  }
+  25%, 75% {
+    opacity: 1;
+    size: 4em;
+    width: 100em;
+    height: 100em;
+  }
+}
+
+  .icon-transmitter {
+    width: 2em;
+    height: 2em;
+    border: none;
+    background: rgb(227,0,0);
+    background: radial-gradient(circle, rgba(227,0,0,1) 0%, rgba(225,0,0,0.5) 20%, rgba(255, 0, 0, 0) 80%, rgba(255,0,0,0) 100%); 
+    animation: blink_transmitter 3s infinite;
+    blur: 10pt;
+  }
+
+
+  .icon-datacenter {
+    width: 2em;
+    height: 2em;
+    border: none;
+    background: rgb(227,0,0);
+    background: radial-gradient(circle, rgba(227,0,0,1) 0%, rgba(225,0,0,0.5) 20%, rgba(255, 0, 0, 0) 80%, rgba(255,0,0,0) 100%); 
+    
+    blur: 10pt;
   }
 
 </style>

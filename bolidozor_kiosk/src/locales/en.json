@@ -1,7 +1,9 @@
 {
     "message": {
       "hello": "Ahoj",
-      "latest_events": "Latest events"
+      "latest_events": "Latest events",
+      "latest_event_before": "Last event before"
+
     },
     "home": {
         "label": "Home",

@@ -119,7 +119,7 @@ export default {
 .event-container {
   display: flex;
   overflow-x: auto;
-  scrollbar-width: thin;
+  scrollbar-width: none;
 }
 
 
@@ -145,6 +145,7 @@ img {
   overflow-y: scroll;
   padding: 20px 10px;
   border-radius: 10px;
+  scrollbar-width: none;
 }
 
 .box {

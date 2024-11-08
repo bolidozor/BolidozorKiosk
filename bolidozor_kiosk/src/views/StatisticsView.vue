@@ -101,6 +101,7 @@ export default {
     justify-content: center;
     max-height: 80vh;
     overflow-y: scroll;
+    scrollbar-width: none;
 
     border: 1px solid #0550c2;
     padding: 20px 10px;
