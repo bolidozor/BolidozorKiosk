@@ -39,15 +39,9 @@ export default {
 .title {
   font-family: 'Orbitron', sans-serif;
   color: #00ff00;
-  text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 40px #00ff00;
+  text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
 }
 
-.card {
-  /* background-color: #1a1a1a; */
-  border: 1px solid #00ff00;
-  padding: 50px 20px;
-  border-radius: 10px;
-}
 
 
 p {

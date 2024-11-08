@@ -2,13 +2,13 @@
 <div class="page-container">
 
 <!-- Pagination Component -->
-<nav class="pagination" role="navigation" aria-label="pagination">
+<nav class="pagination card" role="navigation" aria-label="pagination">
   <span> actual page: {{ current }} </span>
   <button class="pagination-previous" :disabled="!previous" @click="goToPage(previous)">Previous</button> 
   <button class="pagination-next" :disabled="!next" @click="goToPage(next)">Next</button>
 </nav>
 
-<div v-for="group in groups" :key="group.id" class="box">
+<div v-for="group in groups" :key="group.id" class="card">
 <div>{{ group.timestamp }}</div>
 
 <!-- <table class="table is-bordered" >
@@ -39,7 +39,7 @@
 </div>
 
 <!-- Pagination Component -->
-<nav class="pagination" role="navigation" aria-label="pagination">
+<nav class="pagination card" role="navigation" aria-label="pagination">
   <span> actual page: {{ current }} </span>
   <button class="pagination-previous" :disabled="!previous" @click="goToPage(previous)">Previous</button> 
   <button class="pagination-next" :disabled="!next" @click="goToPage(next)">Next</button>
@@ -92,29 +92,6 @@ export default {
 </script>
 
 <style scoped>
-.czech-map {
-  width: 100%;
-  height: auto;
-  max-width: 500px;
-  margin: 0 auto;
-  background-color: #001f3f;
-  border: 1px solid #00aaff;
-}
-
-/* Animace blikání teček */
-.station {
-  fill: #00aaff;
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.2;
-  }
-}
 
 .event-container {
   display: flex;
@@ -148,10 +125,6 @@ img {
   scrollbar-width: none;
 }
 
-.box {
-  background-color: #001f3fde;
-  
-  backdrop-filter: blur(5px);
-}
+
 
 </style>

@@ -1,6 +1,30 @@
 <template>
   <section class="section">
-    <div class="container stat-container">
+  
+    <div class="card stat-container">
+
+
+    <div class="description">
+                  <div v-if="$i18n.locale === 'cs'">
+                      <div class="is-h2">Co zde vidíme?</div>
+                      <p>RMOB "colorgram" histogramy ze sítě Bolidozor ukazují hodinové četnosti a variace hodnot v průběhu dne a kalendářního měsíce.</p>
+                      <p>V levé části se nachází sloupcový histogram, kde každý sloupec představuje jednu denní hodinu (od půlnoci do půlnoci UTC) a jeho výška značí hodinové četnosti detekovaných meteorů.</p>
+                      <p>V pravé části je graf, ve kterém každý čtvereček reprezentuje jednu hodinu. Barva čtverečku odpovídá počtu detekovaných meteorů v danou hodinu. Jeden sloupec tedy zobrazuje celý den (od půlnoci do půlnoci).</p>
+                      <p>Na tomto histogramu je dobře vidět denní variace, kdy je četnost meteorů vyšší v průběhu ranních hodin, zejména při východu slunce. To je dáno geometrickou orientací Země v prostoru, kdy se Země pohybuje ve směru svého nadhlavníku. V histogramu jsou také obvykle patrné určité meteorické roje, které se projevují jako oblasti s vyšší intenzitou několik dnů za sebou ve stejnou dobu.</p>
+                  </div>
+
+                  <div v-if="$i18n.locale === 'en'">
+                      <div class="is-h2">What I can see?</div>
+                      <p>The RMOB "colorgram" histograms from the Bolidozor network display hourly frequencies and variations of values throughout the day and the calendar month. In the left part, there is a bar histogram where each bar represents one hour of the day (from midnight to midnight UTC), and its height indicates the hourly counts of detected meteors.</p>
+
+<p>In the right part, there is a graph where each square represents one hour. The color of the square corresponds to the number of meteors detected during that hour. Each column, therefore, represents an entire day (from midnight to midnight).</p>
+
+<p>This histogram clearly shows daily variations, with higher meteor counts during the morning hours, especially at sunrise. This is due to the Earth's geometric orientation in space, as the Earth moves in the direction of its apex.</p>
+
+<p>Meteor showers are also typically visible in the histogram, appearing as areas with higher intensity over several consecutive days at the same time.</p>
+
+                  </div>
+      </div>
 
       <span
         v-for="observatory in observatories"
@@ -11,13 +35,13 @@
         <div class="content">
           <template v-if="observatory.stations.some(station => station.status === 'active')">
                 
-                              <p class="mt-3" style="color: rgb(105 45 115);">{{observatory.identifier}}, {{observatory.name}} <br> {{ observatory.location }}</p>
+              <p class="mt-3" style="color: rgb(105 45 115);">{{observatory.identifier}}, {{observatory.name}} <br> {{ observatory.location }}</p>
               <div 
                 class="station m-1"
                 v-for="station in observatory.stations.filter(station => station.status === 'active')"
                 v-bind:key="station.identificator"
               >
-                <div class="tag is-llight-primary is-medium mb-3">
+                <div class="tag is-light-primary is-medium mb-3">
                   <b>{{station.identifier}}</b>
                   <span 
                     class="tag ml-2" 
@@ -34,10 +58,12 @@
 
                 <div v-if="station.status === 'active'">
                   <img 
-                    :src="`https://space.astro.cz/bolidozor/support/rmob/${station.identifier}_` + new Date().toLocaleDateString('en-GB').slice(3).replace(/\//g, '') + `.svg`" 
+                    :src="`https://space.astro.cz/bolidozor/support/rmob/${station.identifier}_` + new Date().toLocaleDateString('en-GB').slice(3).replace(/\//g, '') + `.svg?` + new Date()" 
                     alt="RMOB preview"
                   />
                 </div>
+
+
               </div>
             </template>
               </div>
@@ -80,40 +106,36 @@ export default {
 </script>
 
 <style scoped>
-  .card {
-    border: 1px solid #00ff00;
-    padding: 20px;
-    border-radius: 10px;
-  }
 
-  p {
-    font-family: 'Arial', sans-serif;
-    color: #ffffff;
-    font-size: 1.2em;
-    text-align: left;
-    margin-bottom: 1em;
-  }
 
   .stat-container {
-    margin-top: 10vh;
+    margin-top: 2vh;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-height: 80vh;
-    overflow-y: scroll;
-    scrollbar-width: none;
 
-    border: 1px solid #0550c2;
-    padding: 20px 10px;
-    border-radius: 10px;
-    background-color: #cde3f9ba;
-    backdrop-filter: blur(5px);
-    color: rgb(38, 38, 71);
+    background-color: lightblue;
+
   }
 
   .stat-container img {
     width: 100%;
   
+  }
+
+  .description {
+    width: 90%;
+    text-align: left !important;
+    color: black !important;
+  }
+
+  .description p{
+    font-family: 'Arial', sans-serif;
+    color: black;
+    font-size: 1.2em;
+    text-align: left;
+    margin-bottom: 1em;
+    text-align: justify;
   }
 
 </style>

@@ -45,6 +45,9 @@
             <img class="languageFlag" :src="require('@/assets/flag_cz.png')" @click="changeLanguage('cs')" style="height: 50px;">
             <img class="languageFlag" :src="require('@/assets/flag_uk.png')" @click="changeLanguage('en')" style="height: 50px;">
         </div>
+        <div style="margin: 10pt; width: 120pt; margin-top: -10pt;">
+          <img class="languageFlag" :src="require('@/assets/touch.svg')" style="height: 90px; color:gray;">
+        </div>
       </div>
       
       <div class="column is-6" style="z-index: 25; height: min-content; width: 55%;">
@@ -76,6 +79,7 @@
       v-model:center=center
       :maxZoom=12
       :minZoom=6
+      :maxBounds="[[43, 0], [55, 25]]"
     >
       <l-tile-layer
         url="https://api.maptiler.com/maps/ch-swisstopo-lbm-dark/{z}/{x}/{y}@2x.png?key=S2rvHICi0noDquP1bxJP"
@@ -90,14 +94,14 @@
           :observatory="observatory"
           >
             <l-icon>
-              <div :ref="`observatoryIcon-${observatory.identifier}`" :class="['circle-icon', 'icon-inactive', { 'has-active-station': observatory.stations.some(station => station.status === 'active') }]" ></div>
+              <div :ref="`observatoryIcon-${observatory.identifier}`" :class="['circle-icon', 'icon-inactive', { 'icon-active': observatory.stations.some(station => station.status === 'active') }]" ></div>
             </l-icon>
             <l-popup> <div class="leaflet-popup-content">
                 <h3 class="text-strong">{{ observatory.name }} ({{observatory.identifier}})</h3>
                 <p><strong>Location: </strong> {{ observatory.location }}</p>
                 <template v-for="station in observatory.stations.filter(station => station.status === 'active')" v-bind:key="station.identifier">
                 <img 
-                    :src="`https://space.astro.cz/bolidozor/support/rmob/${station.identifier}_` + new Date().toLocaleDateString('en-GB').slice(3).replace(/\//g, '') + `.svg`" 
+                    :src="`https://space.astro.cz/bolidozor/support/rmob/${station.identifier}_` + new Date().toLocaleDateString('en-GB').slice(3).replace(/\//g, '') + `.svg?` + new Date()" 
                     alt="RMOB preview"
                   />
                   </template>
@@ -108,19 +112,41 @@
         </l-marker>
 
         
-        <l-marker :lat-lng="[50, 15]">
-            <l-icon>
-              <div class="circle-icon icon-datacenter"></div>
+        <l-marker :lat-lng="[49.9, 14.78]">
+            <l-icon :class="map-icon">
+              <img :src="require('@/assets/database.svg')">
             </l-icon>
             <l-popup>
               <div class="leaflet-popup-content">
-                Ondřějov - Data and processing center
+                Ondřejov - Data and processing center
               </div>
             </l-popup>
         </l-marker>
+        <l-marker :lat-lng="[49.6, 17.8]">
+            <l-icon :class="map-icon">
+              <img :src="require('@/assets/database.svg')">
+            </l-icon>
+            <l-popup>
+              <div class="leaflet-popup-content">
+                Processing server
+              </div>
+            </l-popup>
+        </l-marker>
+        <l-marker :lat-lng="[48.8, 14.6]">
+            <l-icon :class="map-icon">
+              <img :src="require('@/assets/database.svg')">
+            </l-icon>
+            <l-popup>
+              <div class="leaflet-popup-content">
+                Data and processing center
+              </div>
+            </l-popup>
+        </l-marker>
+
         <l-marker :lat-lng="[47.348, 5.5151]">
-            <l-icon>
+            <l-icon :class="map-icon">
               <div class="circle-icon icon-transmitter"></div>
+              <img class="graves" :src="require('@/assets/transmitter.svg')">
             </l-icon>
             <l-popup>
               <div class="leaflet-popup-content">
@@ -301,6 +327,21 @@ export default {
 
 
 <style>
+
+
+.leaflet-marker-pane img {
+  width: 20pt !important; 
+  margin-top: -10pt;
+  margin-left: -10pt;
+}
+
+
+.leaflet-marker-pane .graves {
+  width: 50pt !important; 
+  margin-top: -25pt;
+  margin-left: -25pt;
+  z-index: 1000;
+}
 
 
 .leaflet-marker-icon {
@@ -502,6 +543,15 @@ body {
     height: 0.5em;
     border-color: rgb(168, 168, 168);
     background-color: lightgrey;
+
+
+    width: 1em;
+    height: 1em;
+    border: none;
+
+    background: rgb(255,0,0);
+    background: radial-gradient(circle, rgba(50,50,255,1) 0%, rgba(50,50,55,0.5) 40%, rgba(50, 50, 80, 0) 80%, rgba(10,10,80,0) 100%); 
+
   }
 
   .has-active-station {
@@ -515,8 +565,6 @@ body {
     width: 1.6em;
     height: 1.6em;
     border: none;
-    #border-color: rgb(168, 168, 168);
-    #background-color: rgb(73, 192, 231); /* light blue bit darker */
 
     background: rgb(0,255,0);
     background: radial-gradient(circle, rgba(0,200,0,1) 0%, rgba(0,255,0,0.5) 40%, rgba(0, 255, 0, 0) 80%, rgba(0,255,0,0) 100%); 

@@ -1,9 +1,12 @@
 <template>
 
 
-<div>
-    <h1>Live TCP Data Stream</h1>
-    <canvas id="waveformCanvas" width="1000" height="1000"></canvas>
+
+<div class="card mt-5">
+    <h1>Live Data Stream</h1>
+
+    <h3>Station: No station connected.</h3>
+    <canvas id="waveformCanvas" width="1000" height="0"></canvas>
   </div>
 </template>
 

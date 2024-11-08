@@ -65,14 +65,7 @@
   </script>
 
   <style scoped>
-  .card {
-    border: 1px solid #00ff00;
-    padding: 20px;
-    border-radius: 10px;
-    max-height: 95vh;
-    overflow-y: scroll;
-    scrollbar-width: none;
-  }
+
 
   p {
     font-family: 'Arial', sans-serif;
